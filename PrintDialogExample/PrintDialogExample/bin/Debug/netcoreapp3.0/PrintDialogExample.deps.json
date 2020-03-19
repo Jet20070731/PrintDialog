@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.0": {
+      "PrintDialogExample/1.0.0": {
+        "dependencies": {
+          "PrintDialog": "1.2.5.0"
+        },
+        "runtime": {
+          "PrintDialogExample.dll": {}
+        }
+      },
+      "PrintDialog/1.2.5.0": {
+        "runtime": {
+          "PrintDialog.dll": {
+            "assemblyVersion": "1.2.5.0",
+            "fileVersion": "1.2.5.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PrintDialogExample/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PrintDialog/1.2.5.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
