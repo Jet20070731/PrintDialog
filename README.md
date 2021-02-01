@@ -7,7 +7,7 @@
 
 Welcome to use **[PrintDialogX](https://github.com/Fei-Sheng-Wu/PrintDialogX/)**, this is a open source project. Free to commercial use.
 
-> A custom PrintDialog for C# with preview in real time. You can select printer and set copies count, orientation, color, quality, scale, pages-per-sheet, two-sided, paper size, paper type, paper source, etc. And it is beautiful, too.
+> A custom PrintDialog for C# with preview in real time. You can select printer and set copies count, orientation, color, quality, scale, pages-per-sheet, two-sided, paper size, paper type, paper source, etc. And it is elegant, too.
 
 ## Why You Use
 
