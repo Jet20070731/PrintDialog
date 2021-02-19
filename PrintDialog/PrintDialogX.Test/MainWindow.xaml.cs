@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System;
 
 namespace PrintDialogX.Test
 {
@@ -50,11 +51,18 @@ namespace PrintDialogX.Test
 
         private void GeneratingDocument()
         {
+            DateTime dateTime = DateTime.Now;
+
+            //Calculate standard A4 paper size (8.25 inch x 11.75 inch).
+            //pixel = inch x 96
+            double pageWidth = 96 * 8.25;
+            double pageHeight = 96 * 11.75;
+
             //Create a new document (a document contains many pages)
             //PrintDialog can only print and preview a FixedDocument
-            //Here are some codes to make a document, if you already know how to do it, you can skip it or put your document instead
+            //Here are some codes to make a document, if you already know how to do it, you can skip it
             FixedDocument fixedDocument = new FixedDocument();
-            fixedDocument.DocumentPaginator.PageSize = PrintDialogX.PaperHelper.PaperHelper.GetPaperSize(System.Printing.PageMediaSizeName.ISOA4, true); //Use PaperHelper class to get A4 page size
+            fixedDocument.DocumentPaginator.PageSize = new Size(pageWidth, pageHeight);
 
             //Define document inner margin;
             double margin = 60;
@@ -81,6 +89,9 @@ namespace PrintDialogX.Test
                 //You can't just add FixedPage into FixedDocument, you need use PageContent to host the FixedPage
                 fixedDocument.Pages.Add(new PageContent() { Child = fixedPage });
             }
+
+            DateTime newtime = DateTime.Now;
+            //MessageBox.Show((newtime - dateTime).TotalSeconds.ToString());
 
             //Setup PrintDialog's properties
             printDialog.Document = fixedDocument; //Set document that need to print
@@ -135,11 +146,16 @@ namespace PrintDialogX.Test
                 WindowStartupLocation = WindowStartupLocation.CenterOwner //PrintDialog's startup location is center of the owner
             };
 
+            //Calculate standard A4 paper size (8.25 inch x 11.75 inch).
+            //pixel = inch x 96
+            double pageWidth = 96 * 8.25;
+            double pageHeight = 96 * 11.75;
+
             //Create a new document (a document contains many pages)
             //PrintDialog can only print and preview a FixedDocument
-            //Here are some codes to make a document, if you already know how to do it, you can skip it or put your document instead
+            //Here are some codes to make a document, if you already know how to do it, you can skip it
             FixedDocument fixedDocument = new FixedDocument();
-            fixedDocument.DocumentPaginator.PageSize = PrintDialogX.PaperHelper.PaperHelper.GetPaperSize(System.Printing.PageMediaSizeName.ISOA4, true); //Use PaperHelper class to get A4 page size
+            fixedDocument.DocumentPaginator.PageSize = new Size(pageWidth, pageHeight);
 
             //Define document inner margin;
             double margin = 60;
@@ -270,8 +286,13 @@ namespace PrintDialogX.Test
 
             for (int i = 0; i < 5; i++)
             {
-                //Calculate the page size (you do not need to recreate the page with the specific page size passed back by from the print settings if you don't want to)
-                Size pageSize = PrintDialogX.PaperHelper.PaperHelper.GetPaperSize(System.Printing.PageMediaSizeName.ISOA4, true);
+                //Calculate standard A4 paper size (8.25 inch x 11.75 inch).
+                //pixel = inch x 96
+                double pageWidth = 96 * 8.25;
+                double pageHeight = 96 * 11.75;
+
+                //Calculate the page size
+                Size pageSize = new Size(pageWidth, pageHeight);
 
                 //Create a new page
                 FixedPage fixedPage = new FixedPage()

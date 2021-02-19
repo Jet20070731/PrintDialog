@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.IO.Packaging;
-using System.Linq;
 using System.Printing;
 using System.Reflection;
 using System.Collections.Generic;
@@ -497,130 +494,25 @@ namespace PrintDialogX.PaperHelper
         /// <summary>
         /// Get actual paper size.
         /// </summary>
-        /// <param name="CMWidth">Paper width in cm.</param>
-        /// <param name="CMHeight">Paper height in cm.</param>
+        /// <param name="CmWidth">Paper width in cm.</param>
+        /// <param name="CmHeight">Paper height in cm.</param>
         /// <returns>Paper size.</returns>
-        public static Size GetPaperSize(double CMWidth, double CMHeight)
+        public static Size GetPaperSizeByCm(double cmWidth, double cmHeight)
         {
-            double cm = 37.7952755905512;
-            return new Size(CMWidth * cm / 10, CMHeight * cm / 10);
+            double factor = 37.7952755905512;
+            return new Size(cmWidth * factor / 10, cmHeight * factor / 10);
         }
 
         /// <summary>
         /// Get actual paper size.
         /// </summary>
-        /// <param name="pageSizeName">Paper size name.</param>
-        /// <param name="isAdvanced">Use advanced calculate formula or not.</param>
+        /// <param name="CmWidth">Paper width in cm.</param>
+        /// <param name="CmHeight">Paper height in cm.</param>
         /// <returns>Paper size.</returns>
-        public static Size GetPaperSize(PageMediaSizeName pageSizeName, bool isAdvanced)
+        public static Size GetPaperSizeByInch(double inchWidth, double inchHeight)
         {
-            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            PageMediaSize pageMediaSize = new PageMediaSize(pageSizeName);
-            printDlg.PrintTicket.PageMediaSize = pageMediaSize;
-
-            if (isAdvanced)
-            {
-                List<Size> printableAreaSize = new List<Size>();
-
-                foreach (PrintQueue printer in PrinterHelper.PrinterHelper.GetLocalPrinters())
-                {
-                    printDlg.PrintQueue = printer;
-                    printableAreaSize.Add(new Size((int)printDlg.PrintableAreaWidth, (int)printDlg.PrintableAreaHeight));
-                }
-
-                return printableAreaSize.GroupBy(i => i).OrderByDescending(group => group.Count()).Select(group => group.Key).First();
-            }
-            else
-            {
-                return new Size(printDlg.PrintableAreaHeight, printDlg.PrintableAreaWidth);
-            }
-        }
-
-        /// <summary>
-        /// Get actual paper size.
-        /// </summary>
-        /// <param name="pageSizeName">Paper size name.</param>
-        /// <param name="printQueue">Printer that the size get from.</param>
-        /// <returns>Paper size.</returns>
-        public static Size GetPaperSize(PageMediaSizeName pageSizeName, PrintQueue printQueue)
-        {
-            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            PageMediaSize pageMediaSize = new PageMediaSize(pageSizeName);
-            printDlg.PrintQueue = printQueue;
-            printDlg.PrintTicket.PageMediaSize = pageMediaSize;
-
-            return new Size(printDlg.PrintableAreaWidth, printDlg.PrintableAreaHeight);
-        }
-
-        /// <summary>
-        /// Get actual paper size.
-        /// </summary>
-        /// <param name="pageSizeName">Paper size name.</param>
-        /// <param name="pageOrientation">Paper orientation.</param>
-        /// <param name="isAdvanced">Use advanced calculate formula pr not.</param>
-        /// <returns>Paper size.</returns>
-        public static Size GetPaperSize(PageMediaSizeName pageSizeName, PrintSettings.PageOrientation pageOrientation, bool isAdvanced)
-        {
-            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            PageMediaSize pageMediaSize = new PageMediaSize(pageSizeName);
-            printDlg.PrintTicket.PageMediaSize = pageMediaSize;
-
-            if (isAdvanced)
-            {
-                List<Size> printableAreaSize = new List<Size>();
-
-                foreach (PrintQueue printer in PrinterHelper.PrinterHelper.GetLocalPrinters())
-                {
-                    printDlg.PrintQueue = printer;
-                    printableAreaSize.Add(new Size((int)printDlg.PrintableAreaWidth, (int)printDlg.PrintableAreaHeight));
-                }
-
-                Size size = printableAreaSize.GroupBy(i => i).OrderByDescending(group => group.Count()).Select(group => group.Key).First();
-
-                if (pageOrientation == PrintSettings.PageOrientation.Portrait)
-                {
-                    return size;
-                }
-                else
-                {
-                    return new Size(size.Height, size.Width);
-                }
-            }
-            else
-            {
-                if (pageOrientation == PrintSettings.PageOrientation.Portrait)
-                {
-                    return new Size(printDlg.PrintableAreaWidth, printDlg.PrintableAreaHeight);
-                }
-                else
-                {
-                    return new Size(printDlg.PrintableAreaHeight, printDlg.PrintableAreaWidth);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get actual paper size.
-        /// </summary>
-        /// <param name="pageSizeName">Paper size name.</param>
-        /// <param name="pageOrientation">Paper orientation.</param>
-        /// <param name="printQueue">Printer that the size get from.</param>
-        /// <returns>Paper size.</returns>
-        public static Size GetPaperSize(PageMediaSizeName pageSizeName, PrintSettings.PageOrientation pageOrientation, PrintQueue printQueue)
-        {
-            System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            PageMediaSize pageMediaSize = new PageMediaSize(pageSizeName);
-            printDlg.PrintQueue = printQueue;
-            printDlg.PrintTicket.PageMediaSize = pageMediaSize;
-
-            if (pageOrientation == PrintSettings.PageOrientation.Portrait)
-            {
-                return new Size(printDlg.PrintableAreaWidth, printDlg.PrintableAreaHeight);
-            }
-            else
-            {
-                return new Size(printDlg.PrintableAreaHeight, printDlg.PrintableAreaWidth);
-            }
+            double factor = 96;
+            return new Size(inchWidth * factor, inchHeight * factor);
         }
     }
 
@@ -2675,7 +2567,7 @@ namespace PrintDialogX.DocumentMaker
         /// <returns>The document.</returns>
         public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, double elementActualHeight)
         {
-            return PaginatonUIElementDocumentMaker(xaml, elementActualHeight, null, 34, PageMediaSizeName.ISOA4, PrintSettings.PageOrientation.Portrait);
+            return PaginatonUIElementDocumentMaker(xaml, elementActualHeight, null, 34, new Size(96 * 8.25, 96 * 11.75));
         }
 
         /// <summary>
@@ -2686,7 +2578,7 @@ namespace PrintDialogX.DocumentMaker
         /// <returns>The document.</returns>
         public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, double elementActualHeight, object dataContext)
         {
-            return PaginatonUIElementDocumentMaker(xaml, elementActualHeight, dataContext, 34, PageMediaSizeName.ISOA4, PrintSettings.PageOrientation.Portrait);
+            return PaginatonUIElementDocumentMaker(xaml, elementActualHeight, dataContext, 34, new Size(96 * 8.25, 96 * 11.75));
         }
 
         /// <summary>
@@ -2699,9 +2591,9 @@ namespace PrintDialogX.DocumentMaker
         /// <param name="documentSize">The document size.</param>
         /// <param name="documentOrientation">The document orientation.</param>
         /// <returns>The document.</returns>
-        public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, double elementActualHeight, object dataContext, double documentMargin, PageMediaSizeName documentSize, PrintSettings.PageOrientation documentOrientation)
+        public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, double elementActualHeight, object dataContext, double documentMargin, Size pageSize)
         {
-            return PaginatonUIElementDocumentMaker(xaml, elementActualHeight, dataContext, documentMargin, PaperHelper.PaperHelper.GetPaperSize(documentSize, true), documentOrientation);
+            return PaginatonUIElementDocumentMaker(xaml, elementActualHeight, dataContext, documentMargin, pageSize);
         }
 
         /// <summary>
@@ -2789,7 +2681,7 @@ namespace PrintDialogX.DocumentMaker
         /// <returns>The document.</returns>
         public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, int pageCount)
         {
-            return PaginatonUIElementDocumentMaker(xaml, pageCount, null, 34, PageMediaSizeName.ISOA4, PrintSettings.PageOrientation.Portrait);
+            return PaginatonUIElementDocumentMaker(xaml, pageCount, null, 34, new Size(96 * 8.25, 96 * 11.75));
         }
 
         /// <summary>
@@ -2800,7 +2692,7 @@ namespace PrintDialogX.DocumentMaker
         /// <returns>The document.</returns>
         public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, int pageCount, object dataContext)
         {
-            return PaginatonUIElementDocumentMaker(xaml, pageCount, dataContext, 34, PageMediaSizeName.ISOA4, PrintSettings.PageOrientation.Portrait);
+            return PaginatonUIElementDocumentMaker(xaml, pageCount, dataContext, 34, new Size(96 * 8.25, 96 * 11.75));
         }
 
         /// <summary>
@@ -2813,10 +2705,10 @@ namespace PrintDialogX.DocumentMaker
         /// <param name="documentSize">The document size.</param>
         /// <param name="documentOrientation">The document orientation.</param>
         /// <returns>The document.</returns>
-        public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, int pageCount, object dataContext, double documentMargin, PageMediaSizeName documentSize, PrintSettings.PageOrientation documentOrientation)
+        public static FixedDocument PaginatonUIElementDocumentMaker(string xaml, int pageCount, object dataContext, double documentMargin, Size pageSize)
         {
             FixedDocument doc = new FixedDocument();
-            doc.DocumentPaginator.PageSize = PaperHelper.PaperHelper.GetPaperSize(documentSize, documentOrientation, true);
+            doc.DocumentPaginator.PageSize = pageSize;
 
             int totalPage = pageCount;
 
